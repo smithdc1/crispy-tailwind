@@ -1,9 +1,8 @@
 from django.template import Context, Template
 from django.test import SimpleTestCase
 
-from crispy_forms.bootstrap import InlineCheckboxes, InlineRadios
+from crispy_tailwind.layout import InlineCheckboxes, InlineRadios, Column, Field, Layout, ButtonHolder, Submit
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Column, Field, Layout
 from crispy_forms.utils import render_crispy_form
 
 from .forms import CharFieldForm, CheckboxMultiple, PasswordFieldForm, RadioForm, SampleForm
@@ -210,6 +209,27 @@ class CrispyHelperTests(SimpleTestCase):
                         </div>
                     </div>
                 </div>
+            </form>
+            """
+        self.assertHTMLEqual(html, expected_html)
+
+    def test_buttons(self):
+        form = CharFieldForm()
+        form.helper = FormHelper()
+        form.helper.layout = Layout(ButtonHolder(Submit("submit", "Submit",)))
+        html = render_crispy_form(form)
+        expected_html= """
+            <form method="post">
+                <div class="buttonHolder"><input type="submit" name="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="submit-id-submit" /></div>
+            </form>
+            """
+        self.assertHTMLEqual(html, expected_html)
+
+        form.helper.layout = Layout(ButtonHolder(Submit("submit", "Submit", css_class="not default classes")))
+        html = render_crispy_form(form)
+        expected_html= """
+            <form method="post">
+                <div class="buttonHolder"><input type="submit" name="submit" value="Submit" class="not default classes" id="submit-id-submit" /></div>
             </form>
             """
         self.assertHTMLEqual(html, expected_html)
