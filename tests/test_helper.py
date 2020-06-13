@@ -1,8 +1,10 @@
 from django.template import Context, Template
 from django.test import SimpleTestCase
 
-from crispy_tailwind.layout import InlineCheckboxes, InlineRadios, Column, Field, Layout, ButtonHolder, Submit
+from crispy_tailwind.layout import Submit
+from crispy_forms.layout import Column, Field, Layout, ButtonHolder
 from crispy_forms.helper import FormHelper
+from crispy_forms.bootstrap import InlineRadios, InlineCheckboxes
 from crispy_forms.utils import render_crispy_form
 
 from .forms import CharFieldForm, CheckboxMultiple, PasswordFieldForm, RadioForm, SampleForm
