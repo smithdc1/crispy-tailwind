@@ -1,11 +1,11 @@
 from django.template import Context, Template
 from django.test import SimpleTestCase
 
-from crispy_tailwind.layout import Submit
-from crispy_forms.layout import Column, Field, Layout, ButtonHolder
+from crispy_forms.bootstrap import InlineCheckboxes, InlineRadios
 from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import InlineRadios, InlineCheckboxes
+from crispy_forms.layout import ButtonHolder, Column, Field, Layout
 from crispy_forms.utils import render_crispy_form
+from crispy_tailwind.layout import Button, Reset, Submit
 
 from .forms import CharFieldForm, CheckboxMultiple, PasswordFieldForm, RadioForm, SampleForm
 
@@ -218,18 +218,24 @@ class CrispyHelperTests(SimpleTestCase):
     def test_buttons(self):
         form = CharFieldForm()
         form.helper = FormHelper()
-        form.helper.layout = Layout(ButtonHolder(Submit("submit", "Submit",)))
+        form.helper.layout = Layout(
+            ButtonHolder(Button("button", "Button"), Submit("submit", "Submit",), Reset("cancel", "Cancel"))
+        )
         html = render_crispy_form(form)
-        expected_html= """
+        expected_html = """
             <form method="post">
-                <div class="buttonHolder"><input type="submit" name="submit" value="Submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="submit-id-submit" /></div>
+                <div class="buttonHolder">
+                    <input type="reset" name="button" value="Button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="reset-id-button" />
+                    <input type="submit" name="submit" value="Submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" id="submit-id-submit" />
+                    <input type="reset" name="cancel" value="Cancel" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" id="reset-id-cancel" />
+                </div>
             </form>
             """
         self.assertHTMLEqual(html, expected_html)
 
         form.helper.layout = Layout(ButtonHolder(Submit("submit", "Submit", css_class="not default classes")))
         html = render_crispy_form(form)
-        expected_html= """
+        expected_html = """
             <form method="post">
                 <div class="buttonHolder"><input type="submit" name="submit" value="Submit" class="not default classes" id="submit-id-submit" /></div>
             </form>
